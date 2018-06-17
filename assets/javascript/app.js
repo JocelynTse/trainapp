@@ -11,40 +11,21 @@
 
   let database = firebase.database();
 
-  let name;
-  let destination;
-  let frequency;
-  let nextArrival;
-  let minutesAway;
-  let freqNew;
-  let firstTime;
-  let timeNew;
+  let name = "";
+  let destination = "";
+  let frequency = "";
+  let nextArrival = "";
+  let minutesAway = "";
 
   $("#submit").on("click", function(event)  {
     event.preventDefault();
 
     var nameNew = $("#trainName").val().trim();
     var destNew = $("#destination").val().trim();
-    timeNew = $("#firstTrain").val().trim();
-    freqNew = $("#frequency").val().trim();
+    var timeNew = $("#firstTrain").val().trim();
+    var freqNew = $("#frequency").val().trim();
 
-    database.ref().push({
-      name: nameNew,
-      destination: destNew,
-      frequency: freqNew,
-      //nextArrival:,
-      //minutesAway:,
-    })
-  })
-
-  database.ref().on("child_added", function(snapshot) {
-    console.log(snapshot.val());
-
-    frequency = freqNew;
-
-    firstTime = timeNew;
-
-    let timeConverted = moment(firstTime, "HH:mm"). subtract(1, "years");
+    let timeConverted = moment(timeNew, "HH:mm"). subtract(1, "years");
     console.log(timeConverted);
 
     let currentTime = moment();
@@ -53,23 +34,45 @@
     let diffTime = moment().diff(moment(timeConverted), "minutes");
     console.log("Difference: " + diffTime);
 
-    let tRemainder = diffTime % frequency;
+    let tRemainder = diffTime % freqNew;
     console.log(tRemainder);
 
-    let tMinsTrain = frequency - tRemainder;
+    let tMinsTrain = freqNew - tRemainder;
     console.log("Minutes Next Train: " + tMinsTrain);
 
     let nextTrain = moment().add(tMinsTrain, "minutes");
+    let nextTrainTemp = moment(nextTrain).format("hh.mm");
     console.log("Arrival: " + moment(nextTrain).format("hh.mm"));
 
-    name = snapshot.val("name");
-    destination = snapshot.val("destination");
-    frequency = snapshot.val("frequency");
-    nextArrival = 
+    database.ref().push({
+      name: nameNew,
+      destination: destNew,
+      frequency: freqNew,
+      nextArrival: nextTrainTemp,
+      minutesAway: tMinsTrain,
+    })
+  });
 
+  database.ref().on("child_added", function(childSnapshot) {
+    console.log(childSnapshot.val());
+
+    name = childSnapshot.val().name;
+    destination = childSnapshot.val().destination;
+    frequency = childSnapshot.val().frequency;
+    nextArrival = childSnapshot.val().nextArrival;
+    minutesAway = childSnapshot.val().minutesAway;
 
     let tRow = $("<tr>");
     
-    let nameTab = $("<td").text() 
+    let nameTab = $("<td>").text(name);
+    let destTab = $("<td>").text(destination);
+    let freqTab = $("<td>").text(frequency);
+    let nextTab = $("<td>").text(nextArrival);
+    let minTab = $("<td>").text(minutesAway);
     
-  })
+    tRow.append(nameTab, destTab, freqTab, nextTab, minTab);
+    $("tbody").append(tRow);
+    
+  }, function(errorObject) {
+    console.log("Errors handled: " + errorObject.code);
+  });
