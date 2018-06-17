@@ -1,9 +1,60 @@
+body    {
+    background-color: #FFD700;
+}
+
+.jumbotron  {
+    background-color: #000066;
+    color: 	#DAA520;
+    text-align: center;
+}
+
+#jumbo  {
+    padding-top: 20px;
+    font-family: 'Spirax', cursive;
+}
+
+.lead   {
+    font-size: 30px;
+}
+
 #container  {
-    padding: 50px;
+    padding-left: 50px;
+    padding-right: 50px;
     padding-bottom: 100px;
 }
 
 .card-header {
-    font-size: 20px;
+    font-size: 40px;
     font-weight: 300;
+    background-color: #9b111e;
+    color: #DAA520;
+    font-family: 'Spirax', cursive;
+}
+
+.card-body  {
+    background-color: #f8f8f8;
+    font-family: 'Forum', cursive;
+    color:  #000066;
+}
+
+th  {
+    font-size: 30px;
+    font-weight: 500;
+    text-align: center;
+}
+
+tbody   {
+    font-size: 25px;
+    font-weight: 100;
+    text-align: center;
+}
+
+label   {
+    font-size: 25px;
+    font-weight: 300;
+}
+
+input   {
+    font-size: 25px;
+    font-weight: 100; 
 }
